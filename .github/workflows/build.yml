@@ -15,7 +15,7 @@ jobs:
       - run: dotnet publish --configuration Release -r win-x64 --self-contained true
 
       - name: Install ILLink
-        run: dotnet tool install -g il-linker --version 1.0.15
+        run: dotnet tool install -g il-linker
 
       - name: Link assemblies
         run: il-linker -c Release -p UEVR.csproj -o linked-output
