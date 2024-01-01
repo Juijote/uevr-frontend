@@ -7,23 +7,14 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.x
-
       - run: dotnet publish --configuration Release -r win-x64 --self-contained true
-
-      - name: Install ILMerge
-        run: |
-          choco install ilmerge.portable -y --source https://chocolatey.org/api/v2/
-
-      - name: Merge assemblies
-        run: ilmerge /out:MergedUEVR.exe ${{github.workspace}}/UEVR/bin/Release/net6.0-windows/win-x64/publish/*.dll
 
       - name: Compress release
         run: |
-          7z a ${{github.workspace}}/ActionsRelease.zip MergedUEVR.exe
+          7z a ${{github.workspace}}/ActionsRelease.zip ${{github.workspace}}/UEVR/bin/Release/net6.0-windows/win-x64/publish
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
