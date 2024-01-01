@@ -76,11 +76,11 @@ namespace UEVR {
     };
 
     enum RenderingMethod {
-        [Description("Native Stereo")]
+        [Description("原生渲染")]
         NativeStereo = 0,
-        [Description("Synced Sequential")]
+        [Description("同步顺序")]
         SyncedSequential = 1,
-        [Description("Alternating/AFR")]
+        [Description("交替/AFR")]
         Alternating = 2
     };
 
@@ -92,14 +92,14 @@ namespace UEVR {
     class ComboMapping {
 
         public static Dictionary<string, string> RenderingMethodValues = new Dictionary<string, string>(){
-            {"0", "Native Stereo" },
-            {"1", "Synced Sequential" },
-            {"2", "Alternating/AFR" }
+            {"0", "原生渲染" },
+            {"1", "同步顺序" },
+            {"2", "交替/AFR" }
         };
 
         public static Dictionary<string, string> SyncedSequentialMethodValues = new Dictionary<string, string>(){
-            {"0", "Skip Tick" },
-            {"1", "Skip Draw" },
+            {"0", "跳过标记" },
+            {"1", "跳过绘制" },
         };
 
         public static Dictionary<string, Dictionary<string, string>> KeyEnums = new Dictionary<string, Dictionary<string, string>>() {
@@ -119,14 +119,14 @@ namespace UEVR {
 
     class GameSettingTooltips {
         public static string VR_RenderingMethod =
-        "Native Stereo: The default, most performant, and best looking rendering method (when it works). Runs through the native UE stereo pipeline. Can cause rendering bugs or crashes on some games.\n" +
-        "Synced Sequential: A form of AFR. Can fix many rendering bugs. It is fully synchronized with none of the usual AFR artifacts. Causes TAA/temporal effect ghosting.\n" +
-        "Alternating/AFR: The most basic form of AFR with all of the usual desync/artifacts. Should generally not be used unless the other two are causing issues.";
+        "原生渲染 默认的，性能最好最美观的渲染方法（当它有效时），通过 UE 原生渲染管道运行，在某些游戏中可能会导致渲染错误或崩溃。\n" +
+        "同步顺序：AFR 的一种形式。可以修复许多渲染错误，它与任何常见的 AFR 工件完全同步，会导致 TAA 时间性抗锯齿重影。\n" +
+        "交替/AFR：AFR 的最基本形式，具有所有常见的不同步/伪影，一般情况下不使用，除非其他两种方式出现了问题。";
 
         public static string VR_SyncedSequentialMethod =
-        "Requires \"Synced Sequential\" rendering to be enabled.\n" +
-        "Skip Tick: Skips the engine tick on the next frame. Usually works well but sometimes causes issues.\n" +
-        "Skip Draw: Skips the viewport draw on the next frame. Works with least issues but particle effects can play slower in some cases.\n";
+        "需要启用 “同步顺序” 渲染\n" +
+        "跳过标记: 跳过下一帧的引擎时钟，通常效果很好，但有时会引起问题。\n" +
+        "跳过绘制: 跳过下一帧的视窗绘制，运行时问题最少，但在某些情况下，粒子特效的速度会变慢。\n";
 
         public static Dictionary<string, string> Entries = new Dictionary<string, string>() {
             { "VR_RenderingMethod", VR_RenderingMethod },
@@ -237,7 +237,7 @@ namespace UEVR {
                 Process.Start(processInfo);
             } catch (Win32Exception ex) {
                 // Handle the case when the user cancels the UAC prompt or there's an error
-                MessageBox.Show($"Error: {ex.Message}\n\nThe application will continue running without administrator privileges.", "Failed to Restart as Admin", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show($"错误: {ex.Message}\n\n该应用程序将在没有管理员权限的情况下继续运行。", "无法以管理员身份重新启动", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -249,7 +249,7 @@ namespace UEVR {
 
         private void Update_InjectStatus() {
             if (m_connected) {
-                m_injectButton.Content = "Terminate Connected Process";
+                m_injectButton.Content = "终止连接的进程";
                 return;
             }
 
@@ -269,7 +269,7 @@ namespace UEVR {
                         var processes = Process.GetProcessesByName(m_lastSelectedProcessName);
 
                         if (processes == null || processes.Length == 0 || !AnyInjectableProcesses(processes)) {
-                            m_injectButton.Content = "Waiting for Process";
+                            m_injectButton.Content = "等待进程";
                             return;
                         }
                     }
@@ -279,14 +279,14 @@ namespace UEVR {
                     var processes = Process.GetProcessesByName(m_lastSelectedProcessName);
 
                     if (processes == null || processes.Length == 0 || !AnyInjectableProcesses(processes)) {
-                        m_injectButton.Content = "Waiting for Process";
+                        m_injectButton.Content = "等待进程";
                         return;
                     }
 
                     m_injectButton.Content = "Inject";
                 }
             } else {
-                m_injectButton.Content = "Waiting for " + m_commandLineAttachExe.ToLower() + "...";
+                m_injectButton.Content = "等待 " + m_commandLineAttachExe.ToLower() + "...";
 
                 var processes = Process.GetProcessesByName(m_commandLineAttachExe.ToLower().Replace(".exe", ""));
 
@@ -350,7 +350,7 @@ namespace UEVR {
             if (data != null) {
                 m_connectionStatus.Text = UEVRConnectionStatus.Connected;
                 m_connectionStatus.Text += ": " + data?.path;
-                m_connectionStatus.Text += "\nThread ID: " + data?.mainThreadId.ToString();
+                m_connectionStatus.Text += "\n线程 ID: " + data?.mainThreadId.ToString();
                 m_lastSharedData = data;
                 m_connected = true;
                 Show_ConnectionOptions();
@@ -446,12 +446,12 @@ namespace UEVR {
         }
         private void ExportConfig_Clicked(object sender, RoutedEventArgs e) {
             if (!m_connected) {
-                MessageBox.Show("Inject into a game first!");
+                MessageBox.Show("先注入游戏！");
                 return;
             }
 
             if (m_lastSharedData == null) {
-                MessageBox.Show("No game connection detected.");
+                MessageBox.Show("未检测到游戏连接");
                 return;
             }
 
@@ -461,7 +461,7 @@ namespace UEVR {
             }
 
             if (!Directory.Exists(dir)) {
-                MessageBox.Show("Directory does not exist.");
+                MessageBox.Show("目录不存在");
                 return;
             }
 
@@ -484,7 +484,7 @@ namespace UEVR {
 
             var gameName = System.IO.Path.GetFileNameWithoutExtension(importPath);
             if (gameName == null) {
-                MessageBox.Show("Invalid filename");
+                MessageBox.Show("无效的文件名");
                 return;
             }
 
@@ -499,7 +499,7 @@ namespace UEVR {
                 var finalGameName = GameConfig.ExtractZipToDirectory(importPath, gameGlobalDir, gameName);
 
                 if (finalGameName == null) {
-                    MessageBox.Show("Failed to extract the ZIP file.");
+                    MessageBox.Show("无法提取 ZIP 文件");
                     return;
                 }
 
@@ -511,7 +511,7 @@ namespace UEVR {
                     SharedMemory.SendCommand(SharedMemory.Command.ReloadConfig);
                 }
             } catch (Exception ex) {
-                MessageBox.Show("An error occurred: " + ex.Message);
+                MessageBox.Show("发生错误: " + ex.Message);
             }
         }
 
@@ -595,7 +595,7 @@ namespace UEVR {
                     }
                 }
             } catch (Exception ex) {
-                Console.WriteLine($"Exception caught: {ex}");
+                Console.WriteLine($"发现异常: {ex}");
             }
 
             return null;
@@ -629,7 +629,7 @@ namespace UEVR {
                     parentPath = System.IO.Path.GetDirectoryName(parentPath);
                 }
             } catch (Exception ex) {
-                Console.WriteLine($"Exception caught: {ex}");
+                Console.WriteLine($"发现异常: {ex}");
             }
 
             return false;
@@ -863,10 +863,10 @@ namespace UEVR {
                             var pluginsDir = AreVRPluginsPresent(gameDirectory);
 
                             if (pluginsDir != null) {
-                                MessageBox.Show("VR plugins have been detected in the game install directory.\n" +
-                                                "You may want to delete or rename these as they will cause issues with the mod.\n" +
-                                                "You may also want to pass -nohmd as a command-line option to the game. This can sometimes work without deleting anything.");
-                                var result = MessageBox.Show("Do you want to open the plugins directory now?", "Confirmation", MessageBoxButton.YesNo);
+                                MessageBox.Show("已在游戏安装目录中检测到 VR 插件，\n" +
+                                                "你可能需要删除或重命名它们，因为它们会导致模组出现问题，\n" +
+                                                "可能还需要将 -nohmd 作为命令行选项启动游戏，有时这可以在不删除任何内容的情况下起启动游戏。");
+                                var result = MessageBox.Show("你想现在打开插件目录吗？", "确认", MessageBoxButton.YesNo);
 
                                 switch (result) {
                                     case MessageBoxResult.Yes:
@@ -883,7 +883,7 @@ namespace UEVR {
                             InitializeConfig(p.ProcessName);
 
                             if (!IsUnrealEngineGame(gameDirectory, m_lastSelectedProcessName) && !m_isFirstProcessFill) {
-                                MessageBox.Show("Warning: " + m_lastSelectedProcessName + " does not appear to be an Unreal Engine title");
+                                MessageBox.Show("警告: " + m_lastSelectedProcessName + " 似乎不是虚幻引擎开发的作品");
                             }
                         }
 
@@ -891,7 +891,7 @@ namespace UEVR {
                     }
                 }
             } catch (Exception ex) {
-                Console.WriteLine($"Exception caught: {ex}");
+                Console.WriteLine($"发现异常: {ex}");
             }
         }
 
@@ -994,10 +994,10 @@ namespace UEVR {
                 IntPtr nullifierBase;
                 if (Injector.InjectDll(process.Id, "UEVRPluginNullifier.dll", out nullifierBase) && nullifierBase.ToInt64() > 0) {
                     if (!Injector.CallFunctionNoArgs(process.Id, "UEVRPluginNullifier.dll", nullifierBase, "nullify", true)) {
-                        MessageBox.Show("Failed to nullify VR plugins.");
+                        MessageBox.Show("无法取消 VR 插件");
                     }
                 } else {
-                    MessageBox.Show("Failed to inject plugin nullifier.");
+                    MessageBox.Show("注入插件无效器失败");
                 }
             }
 
