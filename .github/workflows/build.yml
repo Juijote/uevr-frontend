@@ -14,6 +14,10 @@ jobs:
 
       - run: dotnet publish --configuration Release -r win-x64 --self-contained true
 
+      - name: Add NuGet.org as a package source
+        run: nuget sources add -name nuget.org -source https://api.nuget.org/v3/index.json
+        if: runner.os == 'Windows'
+
       - name: Install ILLink
         run: dotnet tool install -g il-linker
 
