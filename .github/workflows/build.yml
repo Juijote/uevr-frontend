@@ -14,19 +14,16 @@ jobs:
 
       - run: dotnet publish --configuration Release -r win-x64 --self-contained true
 
-      - name: Add NuGet.org as a package source
-        run: nuget sources add -name nuget.org -source https://api.nuget.org/v3/index.json
-        if: runner.os == 'Windows'
+      - name: Install ILMerge
+        run: |
+          choco install ilmerge.portable -y --source https://chocolatey.org/api/v2/
 
-      - name: Install ILLink
-        run: dotnet tool install -g il-linker
-
-      - name: Link assemblies
-        run: il-linker -c Release -p UEVR.csproj -o linked-output
+      - name: Merge assemblies
+        run: ilmerge /out:MergedUEVR.exe ${{github.workspace}}/UEVR/bin/Release/net6.0-windows/win-x64/publish/*.dll
 
       - name: Compress release
         run: |
-          7z a ${{github.workspace}}/ActionsRelease.zip linked-output
+          7z a ${{github.workspace}}/ActionsRelease.zip MergedUEVR.exe
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
