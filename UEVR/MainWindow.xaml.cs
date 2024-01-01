@@ -103,17 +103,17 @@ namespace UEVR {
         };
 
         public static Dictionary<string, Dictionary<string, string>> KeyEnums = new Dictionary<string, Dictionary<string, string>>() {
-            { "VR_RenderingMethod", RenderingMethodValues },
-            { "VR_SyncedSequentialMethod", SyncedSequentialMethodValues },
+            { "VR 渲染方式", RenderingMethodValues },
+            { "VR 同步顺序方式", SyncedSequentialMethodValues },
         };
     };
 
     class MandatoryConfig {
         public static Dictionary<string, string> Entries = new Dictionary<string, string>() {
-            { "VR_RenderingMethod", ((int)RenderingMethod.NativeStereo).ToString() },
-            { "VR_SyncedSequentialMethod", ((int)SyncedSequentialMethods.SkipDraw).ToString() },
-            { "VR_UncapFramerate", "true" },
-            { "VR_Compatibility_SkipPostInitProperties", "false" }
+            { "VR 渲染方式", ((int)RenderingMethod.NativeStereo).ToString() },
+            { "VR 同步顺序方式", ((int)SyncedSequentialMethods.SkipDraw).ToString() },
+            { "VR 解除帧率上限", "是" },
+            { "VR 兼容性跳过初始化后属性", "否" }
         };
     };
 
@@ -129,8 +129,8 @@ namespace UEVR {
         "跳过绘制: 跳过下一帧的视窗绘制，运行时问题最少，但在某些情况下，粒子特效的速度会变慢。\n";
 
         public static Dictionary<string, string> Entries = new Dictionary<string, string>() {
-            { "VR_RenderingMethod", VR_RenderingMethod },
-            { "VR_SyncedSequentialMethod", VR_SyncedSequentialMethod },
+            { "VR 渲染方式", VR_RenderingMethod },
+            { "VR 同步顺序方式", VR_SyncedSequentialMethod },
         };
     }
 
@@ -917,6 +917,10 @@ namespace UEVR {
         }
         private void GitHub_Clicked(object sender, RoutedEventArgs e) {
             Process.Start(new ProcessStartInfo("https://github.com/praydog/UEVR") { UseShellExecute = true });
+        }
+
+        private void Juij_Clicked(object sender, RoutedEventArgs e) {
+            Process.Start(new ProcessStartInfo("https://juij.eu.org/#UEVR") { UseShellExecute = true });
         }
 
         private void Inject_Clicked(object sender, RoutedEventArgs e) {

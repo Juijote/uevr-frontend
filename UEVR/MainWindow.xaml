@@ -13,7 +13,7 @@
         Background="#FF1A1B1C"
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="UEVR"
+        Title="UEVR - 通用虚幻引擎(4/5) VR 模组 v1.0 [Juij 汉化] [2024-01-01]"
         Closing="MainWindow_Closing" Loaded="MainWindow_Loaded"
         SizeToContent="WidthAndHeight" ResizeMode="NoResize" Icon="/UEVR2.png"
         WindowStartupLocation="CenterScreen"
@@ -73,10 +73,14 @@
                         </MenuItem.Header>
                         <TextBlock TextWrapping="Wrap" Text="作者: praydog"/>
 
-                        <MenuItem Header="_Documentation" Click="Documentation_Clicked">
+                        <MenuItem Header="文档" Click="Documentation_Clicked">
                         </MenuItem>
 
-                        <MenuItem Header="_Donate" Click="Donate_Clicked">
+                        <MenuItem Header="捐赠" Click="Donate_Clicked">
+                        </MenuItem>
+
+                        <TextBlock TextWrapping="Wrap" Text="翻译: Juij"/>
+                        <MenuItem Header="汉化更新" Click="Juij_Clicked">
                         </MenuItem>
                     </MenuItem>
                     <MenuItem x:Name="m_openGlobalDirectoryBtn" Click="OpenGlobalDir_Clicked">
@@ -143,14 +147,14 @@
                 <GroupBox x:Name="m_nNotificationsGroupBox" Header="通知" ClipToBounds="True" Visibility="Collapsed">
                     <StackPanel>
                         <TextBlock x:Name="m_adminExplanation" TextWrapping="Wrap" Text="除非以管理员身份启动，否则某些可执行文件可能不会显示或无法注入。" Visibility="Collapsed"/>
-                        <Button x:Name="m_restartAsAdminButton" Content="Restart as Administrator" Click="RestartAsAdminButton_Click" Visibility="Collapsed"/>
+                        <Button x:Name="m_restartAsAdminButton" Content="以管理员身份重新启动" Click="RestartAsAdminButton_Click" Visibility="Collapsed"/>
                     </StackPanel>
                 </GroupBox>
                 <StackPanel Orientation="Horizontal">
                     <GroupBox Header="注入" ClipToBounds="True">
                         <StackPanel ClipToBounds="True" HorizontalAlignment="Left">
                             <ComboBox x:Name="m_processListBox" DropDownOpened="ComboBox_DropDownOpened" SelectionChanged="ComboBox_SelectionChanged" VerticalAlignment="Top" MinWidth="500"/>
-                            <Button x:Name="m_injectButton" Content="Inject" Click="Inject_Clicked"/>
+                            <Button x:Name="m_injectButton" Content="注入" Click="Inject_Clicked"/>
                             <StackPanel Orientation="Horizontal">
                                 <RadioButton x:Name="m_openvrRadio" Content="OpenVR"/>
                                 <RadioButton x:Name="m_openxrRadio" Content="OpenXR"/>
