@@ -19,6 +19,6 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: UEVR
+          name: UEVR-${{ github.run_number }}
           path: ${{github.workspace}}/ActionsRelease.zip
           if-no-files-found: error
