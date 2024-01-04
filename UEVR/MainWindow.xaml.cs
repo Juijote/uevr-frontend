@@ -112,8 +112,8 @@ namespace UEVR {
         public static Dictionary<string, string> Entries = new Dictionary<string, string>() {
             { "VR 渲染方式", ((int)RenderingMethod.NativeStereo).ToString() },
             { "VR 同步顺序方式", ((int)SyncedSequentialMethods.SkipDraw).ToString() },
-            { "VR 解除帧率上限", "是" },
-            { "VR 兼容性跳过初始化后属性", "否" }
+            { "VR 解除帧率上限", "true" },
+            { "VR 兼容性跳过初始化后属性", "false" }
         };
     };
 

@@ -13,7 +13,7 @@
         Background="#FF1A1B1C"
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="UEVR - 通用虚幻引擎(4/5) VR 模组 v1.0 [Juij 汉化] [2024-01-01]"
+        Title="UEVR - 通用虚幻引擎(4/5) VR 模组 Beta v1.01 [Juij 汉化] [2024-01-04]"
         Closing="MainWindow_Closing" Loaded="MainWindow_Loaded"
         SizeToContent="WidthAndHeight" ResizeMode="NoResize" Icon="/UEVR2.png"
         WindowStartupLocation="CenterScreen"
@@ -193,8 +193,8 @@
 
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="键" Width="200" CellTemplate="{StaticResource KeyTemplate}"/>
-                                <GridViewColumn Header="值" Width="150" CellTemplateSelector="{StaticResource valueTemplateSelector}"/>
+                                <GridViewColumn Header="功能" Width="200" CellTemplate="{StaticResource KeyTemplate}"/>
+                                <GridViewColumn Header="选项" Width="150" CellTemplateSelector="{StaticResource valueTemplateSelector}"/>
                             </GridView>
                         </ListView.View>
                     </ListView>

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace UEVR {
     class Injector {
@@ -38,7 +39,27 @@ namespace UEVR {
         public static extern uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
 
         // Inject the DLL into the target process
+        // dllPath is local filename, relative to EXE.
         public static bool InjectDll(int processId, string dllPath, out IntPtr dllBase) {
+            string originalPath = dllPath;
+
+            try {
+                var exeDirectory = AppContext.BaseDirectory;
+
+                if (exeDirectory != null) {
+                    var newPath = Path.Combine(exeDirectory, dllPath);
+
+                    if (System.IO.File.Exists(newPath)) {
+                        dllPath = Path.Combine(exeDirectory, dllPath);
+                    }
+                }
+            } catch (Exception) {
+            }
+
+            if (!System.IO.File.Exists(dllPath)) {
+                MessageBox.Show($"{originalPath} does not appear to exist! Check if any anti-virus software has deleted the file. Reinstall UEVR if necessary.\n\nBaseDirectory: {AppContext.BaseDirectory}");
+            }
+
             dllBase = IntPtr.Zero;
 
             string fullPath = Path.GetFullPath(dllPath);
@@ -52,10 +73,10 @@ namespace UEVR {
             }
 
             // Get the address of the LoadLibrary function
-            IntPtr loadLibraryAddress = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
+            IntPtr loadLibraryAddress = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryW");
 
             if (loadLibraryAddress == IntPtr.Zero) {
-                MessageBox.Show("Could not obtain LoadLibraryA address in the target process.");
+                MessageBox.Show("Could not obtain LoadLibraryW address in the target process.");
                 return false;
             }
 
@@ -67,10 +88,10 @@ namespace UEVR {
                 return false;
             }
 
-            // Write the DLL path to the allocated memory
+            // Write the DLL path in UTF-16
             int bytesWritten = 0;
-            var bytes = Encoding.ASCII.GetBytes(fullPath);
-            WriteProcessMemory(processHandle, dllPathAddress, bytes, (uint)fullPath.Length, out bytesWritten);
+            var bytes = Encoding.Unicode.GetBytes(fullPath);
+            WriteProcessMemory(processHandle, dllPathAddress, bytes, (uint)(fullPath.Length * 2), out bytesWritten);
 
             // Create a remote thread in the target process that calls LoadLibrary with the DLL path
             IntPtr threadHandle = CreateRemoteThread(processHandle, IntPtr.Zero, 0, loadLibraryAddress, dllPathAddress, 0, IntPtr.Zero);
@@ -87,13 +108,14 @@ namespace UEVR {
             // Get base of DLL that was just injected
             if (p != null) try {
                 foreach (ProcessModule module in p.Modules) {
-                    if (module.FileName == fullPath) {
+                    if (module.FileName != null && module.FileName == fullPath) {
                         dllBase = module.BaseAddress;
                         break;
                     }
                 }
             } catch (Exception ex) {
                 Console.WriteLine($"Exception caught: {ex}");
+                MessageBox.Show($"Exception while injecting: {ex}");
             }
 
             return true;
