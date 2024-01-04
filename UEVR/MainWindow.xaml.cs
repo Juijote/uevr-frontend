@@ -258,7 +258,7 @@ namespace UEVR {
 
             if (m_commandLineAttachExe == null) {
                 if (m_lastSelectedProcessId == 0) {
-                    m_injectButton.Content = "Inject";
+                    m_injectButton.Content = "注入";
                     return;
                 }
 
@@ -274,7 +274,7 @@ namespace UEVR {
                         }
                     }
 
-                    m_injectButton.Content = "Inject";
+                    m_injectButton.Content = "注入";
                 } catch (ArgumentException) {
                     var processes = Process.GetProcessesByName(m_lastSelectedProcessName);
 
@@ -283,7 +283,7 @@ namespace UEVR {
                         return;
                     }
 
-                    m_injectButton.Content = "Inject";
+                    m_injectButton.Content = "注入";
                 }
             } else {
                 m_injectButton.Content = "等待 " + m_commandLineAttachExe.ToLower() + "...";
